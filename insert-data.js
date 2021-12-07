@@ -16,7 +16,7 @@ const client = new MongoClient(url);
          // Use the collection "people"
          const col = db.collection("nightshops");
 
-         // Construct a document                                                                                                                                                              
+         // Construct a document
          let nightshopDocument = {
             name:"Night store",
             adress:"Quai aux Barques 1, 1000 Bruxelles",
