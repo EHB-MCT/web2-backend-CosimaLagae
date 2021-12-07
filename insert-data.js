@@ -1,11 +1,11 @@
 const { MongoClient } = require("mongodb");
  
 // Replace the following with your Atlas connection string                                                                                                                                        
-const url = "mongodb+srv://<username>:<password>@clustername.mongodb.net/test?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true";
+const url = "mongodb+srv://cosimalagae:NightShops@cluster0.feoj2.mongodb.net/web2courseproject?retryWrites=true&w=majority";
 const client = new MongoClient(url);
  
  // The database to use
- const dbName = "test";
+ const dbName = "web2courseproject";
                       
  async function run() {
     try {
@@ -14,19 +14,17 @@ const client = new MongoClient(url);
          const db = client.db(dbName);
 
          // Use the collection "people"
-         const col = db.collection("people");
+         const col = db.collection("nightshops");
 
          // Construct a document                                                                                                                                                              
-         let personDocument = {
-             "name": { "first": "Alan", "last": "Turing" },
-             "birth": new Date(1912, 5, 23), // June 23, 1912                                                                                                                                 
-             "death": new Date(1954, 5, 7),  // June 7, 1954                                                                                                                                  
-             "contribs": [ "Turing machine", "Turing test", "Turingery" ],
-             "views": 1250000
-         }
-
+         let nightshopDocument = {
+            name:"Night store",
+            adress:"Quai aux Barques 1, 1000 Bruxelles",
+            samosa:false
+            }
+         
          // Insert a single document, wait for promise so we can read it back
-         const p = await col.insertOne(personDocument);
+         const p = await col.insertOne(nightshopDocument);
          // Find one document
          const myDoc = await col.findOne();
          // Print to the console
@@ -42,3 +40,4 @@ const client = new MongoClient(url);
 }
 
 run().catch(console.dir);
+
