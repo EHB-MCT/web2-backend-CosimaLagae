@@ -9,6 +9,8 @@ console.log(process.env.TEST);;
 
 const client = new MongoClient(process.env.FINAL_URL);
 
+// mongodb+srv://<username>:<password>@cluster0.feoj2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
 const app = express()
 const port = process.env.PORT
 
@@ -18,7 +20,7 @@ app.use(bodyParser.json());
 //Root route
 app.get('/', (req, res) => {
     console.log('local root called!');
-    res.status(300).res.redirect('/info.html');
+    res.status(300).redirect('/info.html');
 })
 
 //return all nightshops from the datbase
