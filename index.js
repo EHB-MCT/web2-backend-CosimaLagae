@@ -3,15 +3,18 @@ const fs = require('fs/promises');
 const bodyParser = require('body-parser')
 const {MongoClient} = require('mongodb');
 //const config = require('./config.json')
+require('dotenv').config();
 
-//const client = new MongoClient(config.finalUrl);
+console.log(process.env.TEST);;
 
-const uri = "mongodb+srv://cosimalagae:NightShops@cluster0.feoj2.mongodb.net/web2courseproject?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.FINAL_URL);
+
+//const uri = "mongodb+srv://cosimalagae:NightShops@cluster0.feoj2.mongodb.net/web2courseproject?retryWrites=true&w=majority";
+//const client = new MongoClient(uri);
 
 
 const app = express()
-const port = 3000
+const port = process.env.PORT
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
