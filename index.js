@@ -9,10 +9,6 @@ console.log(process.env.TEST);;
 
 const client = new MongoClient(process.env.FINAL_URL);
 
-//const uri = "mongodb+srv://cosimalagae:NightShops@cluster0.feoj2.mongodb.net/web2courseproject?retryWrites=true&w=majority";
-//const client = new MongoClient(uri);
-
-
 const app = express()
 const port = process.env.PORT
 
