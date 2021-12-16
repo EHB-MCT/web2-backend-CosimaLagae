@@ -1,5 +1,5 @@
 
-const { MongoClient } = require('mongodb');
+const {MongoClient} = require('mongodb');
 const uri = "mongodb+srv://cosimalagae:NightShops@cluster0.feoj2.mongodb.net/web2courseproject?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
 test();

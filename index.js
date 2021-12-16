@@ -2,9 +2,13 @@ const express = require('express')
 const fs = require('fs/promises');
 const bodyParser = require('body-parser')
 const {MongoClient} = require('mongodb');
-const config = require('./config.json')
+//const config = require('./config.json')
 
-const client = new MongoClient(config.finalUrl);
+//const client = new MongoClient(config.finalUrl);
+
+const uri = "mongodb+srv://cosimalagae:NightShops@cluster0.feoj2.mongodb.net/web2courseproject?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+
 
 const app = express()
 const port = 3000
@@ -22,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/nightshops',async(req, res)=>{
     try{
         await client.connect();
-        console.log("connect");
+        // console.log("connect");
 
         const colli = client.db("web2courseproject").collection("nightshops");
         const nss = await colli.find({}).toArray();
@@ -31,7 +35,7 @@ app.get('/nightshops',async(req, res)=>{
     } catch(error){
         console.log(error);
         res.status(500).send({
-            error: 'something went wrong',
+            error: 'Something went wrong',
             value: error
         });
     }  finally {
@@ -41,12 +45,15 @@ app.get('/nightshops',async(req, res)=>{
 
 //get one nightshop
 app.get('/nightshop',async(req, res)=>{
-    console.log(req.query.id);
+    //id is located in the query: req.query.id
     try{
-        let nightshops = await fs.readFile('data/nightshops.json');
-        nightshops = JSON.parse(nightshops);
+        await client.connect();
+        const colli = client.db("web2courseproject").collection("nightshops");
 
-        let ns = nightshops[req.query.id];
+        const query = {nsid: Number(req.query.id)};
+        console.log(query);
+
+        const ns = await colli.findOne(query);;
 
         if(ns){
             res.status(200).send(ns);
@@ -56,32 +63,51 @@ app.get('/nightshop',async(req, res)=>{
         }
     } catch(error){
         console.log(error);;
-        res.status(500).send('File could not be read')
-    } 
+        res.status(500).send({
+            error: 'File could not be read',
+            value: error
+        });
+    } finally {
+        await client.close();
+    }
 })
 
 //save a nightshop POST
 app.post('/saveNightshop', async (req, res)=>{
-    if(!req.body.id || !req.body.name || !req.body.adress || !req.body.samosa){
+    if(!req.body.nsid || !req.body.name || !req.body.adress || !req.body.samosa){
         res.status(400).send('bad request missing id, name, adress or samosa')
         return;
     } 
     try{
-        let nightshops = await fs.readFile('data/nightshops.json');
-        nightshops = JSON.parse(nightshops);
-    
-        nightshops[req.body.id] = {
+        await client.connect();
+        const colli = client.db("web2courseproject").collection("nightshops");
+
+        const ns = await colli.findOne({nsid: req.body.nsid});
+        if(ns){
+            res.status(400).send('Bad request: nightshop already exists with id '+ req.body.nsid);
+            return;
+        }    
+
+        let newNightshop = {
+            nsid: req.body.nsid,
             name: req.body.name,
             adress: req.body.adress,
             samosa: req.body.samosa
         }
-        
-        await fs.writeFile('data/nightshops.json',JSON.stringify(nightshops));
-        res.status(201).send(`nightshop succesfully saved with id ${req.body.id}`);
+
+        let insertResult = await colli.insertOne(newNightshop);
+
+        res.status(201).send(`nightshop succesfully saved with nsid ${req.body.nsid}`);
         return;
 
     } catch(error){
-        res.status(500).send('an error has occured!')
+        console.log(error);;
+        res.status(500).send({
+            error: 'An error has occured!',
+            value: error
+        });
+    }finally {
+        await client.close();
     }
 })
 
