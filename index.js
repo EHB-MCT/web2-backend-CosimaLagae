@@ -6,7 +6,6 @@ const config = require('./config.json')
 
 const client = new MongoClient(config.finalUrl);
 
-
 const app = express()
 const port = 3000
 
@@ -19,15 +18,25 @@ app.get('/', (req, res) => {
     res.status(300).res.redirect('/info.html');
 })
 
-//return all nightshops from the file
+//return all nightshops from the datbase
 app.get('/nightshops',async(req, res)=>{
     try{
-        let data = await fs.readFile('data/nightshops.json');
-        res.status(200).send(JSON.parse(data));
+        await client.connect();
+        console.log("connect");
 
+        const colli = client.db("web2courseproject").collection("nightshops");
+        const nss = await colli.find({}).toArray();
+
+        res.status(200).send(nss);
     } catch(error){
-        res.status(500).send('File could not be read')
-    }  
+        console.log(error);
+        res.status(500).send({
+            error: 'something went wrong',
+            value: error
+        });
+    }  finally {
+        await client.close();
+    }
 })
 
 //get one nightshop
@@ -38,7 +47,6 @@ app.get('/nightshop',async(req, res)=>{
         nightshops = JSON.parse(nightshops);
 
         let ns = nightshops[req.query.id];
-
 
         if(ns){
             res.status(200).send(ns);
