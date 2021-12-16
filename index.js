@@ -1,6 +1,12 @@
 const express = require('express')
 const fs = require('fs/promises');
 const bodyParser = require('body-parser')
+const {MongoClient} = require('mongodb');
+const config = require('./config.json')
+
+const client = new MongoClient(config.finalUrl);
+
+
 const app = express()
 const port = 3000
 

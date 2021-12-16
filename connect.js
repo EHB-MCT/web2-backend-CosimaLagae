@@ -11,11 +11,11 @@ async function test(){
 
     console.log("connected")
     const collection = client.db("web2courseproject").collection("nightshops");
-    console.log("connected2")
+    //console.log("connected2")
 
     // perform actions on the collection object
     let nightshops = await collection.find({}).toArray();
-    console.log("connected3")
+    //console.log("connected3")
 
     console.log(nightshops)
 
