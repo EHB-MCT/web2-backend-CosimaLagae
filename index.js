@@ -89,7 +89,7 @@ app.post('/saveNightshop', async (req, res)=>{
 
         let insertResult = await colli.insertOne(newNightshop);
 
-        res.status(201).send(alert(`nightshop succesfully saved with nsid ${req.body.nsid}`));
+        res.status(201).alert(`nightshop succesfully saved with nsid ${req.body.nsid}`);
         return;
 
     } catch(error){
