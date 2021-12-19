@@ -2,14 +2,11 @@ const express = require('express')
 const fs = require('fs/promises');
 const bodyParser = require('body-parser')
 const {MongoClient} = require('mongodb');
-//const config = require('./config.json')
 require('dotenv').config();
 
 console.log(process.env.TEST);;
 
 const client = new MongoClient(process.env.FINAL_URL);
-
-// mongodb+srv://<username>:<password>@cluster0.feoj2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 const app = express()
 const port = process.env.PORT
@@ -17,17 +14,14 @@ const port = process.env.PORT
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-//Root route
 app.get('/', (req, res) => {
     console.log('local root called!');
     res.status(300).redirect('/info.html');
 })
 
-//return all nightshops from the datbase
 app.get('/nightshops',async(req, res)=>{
     try{
         await client.connect();
-        // console.log("connect");
 
         const colli = client.db("web2courseproject").collection("nightshops");
         const nss = await colli.find({}).toArray();
@@ -44,9 +38,7 @@ app.get('/nightshops',async(req, res)=>{
     }
 })
 
-//get one nightshop
 app.get('/nightshop',async(req, res)=>{
-    //id is located in the query: req.query.id
     try{
         await client.connect();
         const colli = client.db("web2courseproject").collection("nightshops");
@@ -73,7 +65,6 @@ app.get('/nightshop',async(req, res)=>{
     }
 })
 
-//save a nightshop POST
 app.post('/saveNightshop', async (req, res)=>{
     if(!req.body.nsid || !req.body.name || !req.body.adress || !req.body.samosa){
         res.status(400).send('bad request missing id, name, adress or samosa')
