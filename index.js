@@ -78,8 +78,10 @@ app.post('/saveNightshop', async (req, res)=>{
         if(ns){
             res.status(400).send('Bad request: nightshop already exists with id '+ req.body.nsid);
             return;
-        }    
+        }   
 
+        console.log("BODY",req.body);
+        
         let newNightshop = {
             nsid: req.body.nsid,
             name: req.body.name,
