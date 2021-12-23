@@ -66,10 +66,10 @@ app.get('/nightshop',async(req, res)=>{
 })
 
 app.post('/saveNightshop', async (req, res)=>{
-    if(!req.body.nsid || !req.body.name || !req.body.adress || !req.body.samosa){
+    /*if(!req.body.nsid || !req.body.name || !req.body.adress || !req.body.samosa){
         res.status(400).send('bad request missing id, name, adress or samosa')
         return;
-    } 
+    }*/
     try{
         await client.connect();
         const colli = client.db("web2courseproject").collection("nightshops");
